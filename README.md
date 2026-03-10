@@ -1,119 +1,102 @@
-# Full-Stack E-Commerce Application
+# E-Commerce Web Application
 
-A full-stack E-Commerce web application built using Spring Boot (Backend) and React.js with Vite (Frontend) that supports complete product management, keyword-based product search, shopping cart functionality, and order placement with persistent database storage.
-
-This project demonstrates real-world implementation of REST APIs, frontend-backend integration, and database-driven application design.
+A full-stack e-commerce application built with **Spring Boot** and **React.js**, featuring product management, shopping cart, keyword search, and role-based access control using **Spring Security**.
 
 ---
 
 ## Features
 
-- Product catalog with full CRUD operations  
-- Keyword-based product search  
-- User-friendly shopping cart functionality  
-- Order placement system  
-- RESTful APIs built using Spring Boot  
-- Frontend built using React.js with Vite  
-- Database persistence using Hibernate and JPA  
-  - H2 (in-memory) database for development  
-  - Easily configurable to MySQL for production  
-- Responsive UI for smooth user experience  
-- Clean separation of frontend and backend concerns  
+- **Authentication** — Register and login with HTTP Basic Auth backed by Spring Security and BCrypt password hashing
+- **Role-based access** — Admin can add, update, and delete products; Users can browse and shop
+- **Product catalog** — Browse products with images, descriptions, pricing, and stock availability
+- **Keyword search** — Search across product name, brand, description, and category
+- **Category filter** — Filter products by Laptop, Mobile, Electronics, Headphone, Toys, Fashion
+- **Shopping cart** — Add/remove products, persistent across page refreshes via localStorage
+- **Product management** — Admin can add products with images, update details, and delete listings
+- **Dark/Light theme** — Toggle between themes, preference saved locally
 
 ---
 
-## Technology Stack
+## Tech Stack
 
-### Backend
-- Java 21  
-- Spring Boot  
-- Hibernate  
-- JPA  
-- H2 (Development) / MySQL (Production - Optional)  
-- Maven  
-
-### Frontend
-- React.js (Vite)  
-- JavaScript  
-- npm  
-
-### Tools and Version Control
-- Git  
-- GitHub  
-- Postman (API Testing)  
+| Layer | Technology |
+|---|---|
+| Backend | Java 21, Spring Boot 3.5, Spring Security, Spring Data JPA |
+| Frontend | React 18, Vite, Axios, Bootstrap 5 |
+| Database | H2 (file-based, persists across restarts) |
+| Auth | HTTP Basic Auth, BCrypt, Role-based authorization |
+| Build | Maven |
 
 ---
 
-## Setup Instructions
-
-Follow the steps below to run this project locally.
+## Running Locally
 
 ### Prerequisites
+- Java 21
+- Node.js 
+- Maven
 
-- Java 21  
-- Maven  
-- Node.js and npm  
-- Git  
+### Backend
 
----
-
-### Backend Setup (Spring Boot)
-
-git clone https://github.com/Avisek9/ecommerce-app.git  
-
+```bash
 cd ecommerce-backend
+./mvnw spring-boot:run
+```
 
-mvn clean install 
+Backend runs on `http://localhost:8080`
 
-mvn spring-boot:run  
+### Frontend
 
-The backend will start on:
-
-http://localhost:8080  
-
-H2 Console (Optional):
-
-http://localhost:8080/h2-console  
-
----
-
-### Frontend Setup (React.js with Vite)
-
+```bash
 cd ecommerce-frontend
+npm install
+npm run dev
+```
 
-npm install 
-
-npm run dev  
-
-Frontend will run on:
-
-http://localhost:5173  
+Frontend runs on `http://localhost:5173`
 
 ---
 
-## API and Database
+## Default Credentials
 
-- All backend services are exposed via REST APIs  
-- Hibernate ORM is used for database interaction  
-- Search APIs allow filtering products by keyword  
-- The application can be easily configured to switch from H2 to MySQL using application properties  
+| Role | Username | Password |
+|---|---|---|
+| Admin | `admin` | `admin123` |
+| User | `user` | `user123` |
 
----
-
-## Future Enhancements
-
-- User authentication and authorization using Spring Security and JWT  
-- Payment gateway integration  
-- Admin dashboard  
-- Order tracking system  
-- Advanced search and filtering  
+> **First time setup:** Log in as `admin` and add a few products with images to populate the catalog. The app uses a local file-based H2 database — data persists across restarts on your machine.
 
 ---
 
-## Author
+## Project Structure
 
-Abhishek Sahu  
+```
+ecommerce-app/
+├── ecommerce-backend/
+│   └── src/main/java/com/avisek/app/e_com_project/
+│       ├── config/          # SecurityConfig, CorsConfig, DataSeeder
+│       ├── controller/      # ProductController, AuthController
+│       ├── model/           # Product, User
+│       ├── repo/            # ProductRepo, UserRepo
+│       └── service/         # ProductService, UserDetailsServiceImpl
+└── ecommerce-frontend/
+    └── src/
+        ├── components/      # Home, Navbar, Product, Cart, AddProduct, Login...
+        ├── Context/         # AppContext (cart state, product data)
+        └── axios.jsx        # Axios instance with Basic Auth interceptor
+```
 
 ---
 
-If you find this project useful, feel free to give it a star.
+## Security Design
+
+- **HTTP Basic Auth** — credentials sent as `Base64(username:password)` on every request via Axios interceptor
+- **Stateless sessions** — `SessionCreationPolicy.STATELESS`, no server-side session state
+- **BCrypt** — passwords hashed before storage, never stored in plaintext
+- **Role-based rules:**
+  - `GET /api/products/**` — public
+  - `POST/PUT/DELETE /api/product` — `ROLE_ADMIN` only
+  - All other endpoints — authenticated users only
+- **Auto logout** — 401 response from server clears credentials and redirects to login
+
+---
