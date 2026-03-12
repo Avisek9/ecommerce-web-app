@@ -4,7 +4,7 @@ const API = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
-// Attach Basic Auth header on every request if credentials are stored
+
 API.interceptors.request.use((config) => {
   const creds = sessionStorage.getItem("basicAuth");
   if (creds) {
@@ -13,7 +13,7 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// If server returns 401, clear credentials and reload to login
+
 API.interceptors.response.use(
   (res) => res,
   (err) => {
