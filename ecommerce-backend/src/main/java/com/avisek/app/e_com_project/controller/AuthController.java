@@ -21,12 +21,12 @@ public class AuthController {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    // Register a new user
+    
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
-        String role     = body.getOrDefault("role", "USER"); // USER or ADMIN
+        String role     = body.getOrDefault("role", "USER"); 
 
         if (username == null || username.isBlank() || password == null || password.isBlank())
             return ResponseEntity.badRequest().body(Map.of("error", "Username and password are required"));
@@ -51,7 +51,7 @@ public class AuthController {
                 .body(Map.of("message", "User registered successfully", "username", username));
     }
 
-    // Used by frontend to verify credentials and get current user info
+
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null)
