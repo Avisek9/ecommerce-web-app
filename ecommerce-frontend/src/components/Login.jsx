@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import API from "../axios";
 
 export default function Login({ onLogin }) {
-  // Always show login page in light theme
+  
   useEffect(() => {
     document.body.className = "light-theme";
   }, []);
@@ -18,16 +18,16 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setError(""); setLoading(true);
 
-    // Basic Auth token = base64(username:password)
+    
     const token = btoa(`${username}:${password}`);
 
     try {
-      // Verify credentials against /api/auth/me
+      
       const res = await API.get("/auth/me", {
         headers: { Authorization: `Basic ${token}` },
       });
 
-      // Store token and user info in sessionStorage
+      
       sessionStorage.setItem("basicAuth", token);
       sessionStorage.setItem("authUser", JSON.stringify(res.data));
       onLogin(res.data);
