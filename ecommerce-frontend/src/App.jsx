@@ -16,7 +16,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [authUser, setAuthUser] = useState(() => {
-    // Restore session if credentials still in sessionStorage
+    
     const stored = sessionStorage.getItem("authUser");
     return stored ? JSON.parse(stored) : null;
   });
