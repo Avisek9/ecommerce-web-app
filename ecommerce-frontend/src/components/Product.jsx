@@ -10,7 +10,7 @@ const Product = () => {
   const [imageUrl, setImageUrl] = useState("");
   const navigate = useNavigate();
 
-  // Read role from sessionStorage
+  
   const authUser = JSON.parse(sessionStorage.getItem("authUser") || "{}");
   const isAdmin = authUser?.role === "ADMIN";
 
